@@ -67,7 +67,6 @@ userSchema.statics.findByCredentials = async (email, password) => {
 
 userSchema.methods.generateAuthToken = function generateAuthToken() {
    const user = this
-    console.log(user)
     const payload = {_id: user._id.toString() }
     const token = jwt.sign(payload, process.env.JWT_SECRET)
     user.tokens = user.tokens.concat({token})

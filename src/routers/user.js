@@ -37,9 +37,26 @@ router.post('/login', async function(req, res) {
   
     }
 })    
-router.post('/register', async function(req, res) {   
-    res.send(req.body)
+router.post('/register', async (req, res) => {   
+    try {
+        var user = new User(req.body);
+        await user.save();
+        const token = await user.generateAuthToken()
+        res.status(200).send(user);
+      } catch (error) {
+        if (error.name === "ValidationError") {
+          let errors = {};
+    
+          Object.keys(error.errors).forEach((key) => {
+            errors[key] = error.errors[key].message;
+          });
+    
+          return res.status(400).send(errors);
+        }
+        res.status(500).send("Something went wrong");
+      }
 })  
+
 router.get('*', (req, res) => {
     res.render('404', {layout: false})
 })
