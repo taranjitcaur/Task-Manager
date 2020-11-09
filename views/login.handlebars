@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Login</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="main-content">
+        {{>header}}
+        <p> </p>
+          <form action="/login" method="post" enctype="application/x-www-form-urlencoded">
+            <div class="container">
+              <label for="uname"><b>Email</b></label>
+              </br></br>
+              <input type="email" placeholder="Enter Email" name="email" required>
+              </br></br>
+              <label for="psw"><b>Password</b></label>
+              </br></br>
+              <input type="password" placeholder="Enter Password" name="password" required>
+              </br></br>
+              <button type="submit">Login</button>
+            </div>
+          </form>
+           <p id="message-1"></p>
+        <p id="message-2"></p>
+        </p>
+    </div>
+    {{>footer}} 
+</body>
+</html>
