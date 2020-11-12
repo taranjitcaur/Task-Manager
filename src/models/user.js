@@ -53,16 +53,35 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 })
 
-userSchema.statics.findByCredentials = async (email, password) => {   
-    try {
+userSchema.statics.findByCredentials = async (email, password) => {  
+    /*try {
         const user = await User.findOne({ email })
         if(!user) {
             throw new Error('no document found')
         }
-        return user
+        //console.log(dbPassword)
+        const isMatch = await bcrypt.compare(password, user.password)
+
+    if (!isMatch) {
+        throw new Error('Unable to login')
+    }    
+        //sreturn user
     } catch(error) {
         return error;
+    }*/
+    const user = await User.findOne({ email })
+
+    if (!user) {
+        throw new Error('User not found')
     }
+
+    const isMatch = await bcrypt.compare(password, user.password)
+
+    if (!isMatch) {
+        throw new Error('Password is incorrect')
+    }
+    return user
+    
 } 
 
 userSchema.methods.generateAuthToken = function generateAuthToken() {
