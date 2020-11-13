@@ -22,7 +22,6 @@ router.post('/users', async(req, res) => {
     try {
         await user.save()
         const token = user.generateAuthToken()   
-        console.log(token)  
         res.send(user)
     } catch(error) {
         return res.status(400).send(error)
@@ -73,22 +72,33 @@ router.get('/tasks', auth, function(req,res) {
     res.render('tasks')
 })
 router.get('/logout', auth, async function(req, res){
-    //console.log(req.user.tokens)
-
-   // console.log('req.user.tokens')
-   try {
+    try {
     req.user.tokens = req.user.tokens.forEach((key) => {   
         return req.token !== key.token
     })    
     await req.user.save()   
+    res.clearCookie('Authorization');
     res.render('login', {layout: 'main', Message: 'Please login again !' })   
    } catch(err) {
     res.render('error', {
         layout: 'main',
         Message: err.message
     })
-   }
-     
+   }     
+})
+router.get('/logoutall', auth, async function(req, res) {
+    console.log(req.user);
+    try {
+        req.user.tokens = []
+        req.user.save()
+        res.render('login', {layout: 'main', Message: 'Please login again !' }) 
+    } catch(err) {
+        res.render('error', {
+            layout: 'main',
+            Message: err.message
+        })
+    }
+
 })
 router.get('*', (req, res) => {
     res.render('404', {layout: false})    
