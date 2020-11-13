@@ -1,5 +1,5 @@
 const path = require('path');
-
+var cookieParser = require('cookie-parser')
 const express = require('express')
 const exphbs  = require('express-handlebars');
 
@@ -23,9 +23,15 @@ app.set( 'view engine', 'handlebars' );
 //app.use(express.static(publicDirectoryPath))
 const userRouter = require('./routers/user')
 const port = process.env.PORT || 8000
+
 app.listen(port, () => {
     console.log(`listening on port ${port}`)
   })
+app.use(cookieParser())
 app.use(express.static(publicDirectoryPath))
 app.use(express.json()) 
 app.use(userRouter)
+app.use(function(err, req, res, next) {
+  res.status(500);
+  res.render('error', {layout: 'main', Message: err.message })
+});

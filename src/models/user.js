@@ -80,6 +80,7 @@ userSchema.statics.findByCredentials = async (email, password) => {
     if (!isMatch) {
         throw new Error('Password is incorrect')
     }
+
     return user
     
 } 
@@ -88,7 +89,7 @@ userSchema.methods.generateAuthToken = function generateAuthToken() {
    const user = this
     const payload = {_id: user._id.toString() }
     const token = jwt.sign(payload, process.env.JWT_SECRET)
-    user.tokens = user.tokens.concat({token})
+    user.tokens = user.tokens.concat({token})    
     user.save()
     return token
 }
